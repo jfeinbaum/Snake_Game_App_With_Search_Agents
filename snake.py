@@ -32,8 +32,8 @@ class Game:
         # Error checking - inside border, not on top of snake body
         snake_positions = [sq.pos for sq in self.snake.body]
         while True:
-            food_x = random.randint(0, ROWS)
-            food_y = random.randint(0, COLS)
+            food_x = random.randint(1, ROWS-1)
+            food_y = random.randint(1, COLS-1)
             if (food_x, food_y) not in snake_positions:
                 break
         new_food = Square((food_x, food_y), WHITE, Action.STOP)
@@ -127,7 +127,6 @@ class Snake:
             segment.move()
 
     def add_segment(self):
-        # TODO segments should not be able to disconnect from the head of the snake
         previous_tail = self.body[-1]
         direction = previous_tail.direction
         segment_pos = (previous_tail.pos[0] - direction.value[0],
@@ -141,8 +140,9 @@ class Snake:
             segment.draw_square(window)
 
     def body_collide(self):
-        # TODO implement body collision
-        return False
+        body_positions = [sq.pos for sq in self.body]
+        body_positions.remove(self.head.pos)
+        return self.head.pos in body_positions
 
 
 class Square:
@@ -177,7 +177,7 @@ class Action(Enum):
 
 
 def driver():
-    snake = Snake((10, 10), RED, WHITE)
+    snake = Snake((10, 10), RED,RED)
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(window, snake)
     game.redraw_window()
@@ -199,15 +199,12 @@ def driver():
             print("DEATH -- BODY COLLIDE -- GAME OVER")
             break
 
-        # TODO eat food -> add body segment, increment score counter
         if game.food_eaten(snake.head.pos):
             # increment score
             game.score += 1
             print("Score:", game.score)
             # add body segment
             game.snake.add_segment()
-
-
             # generate new food
             game.random_food()
 
