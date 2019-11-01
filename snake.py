@@ -23,16 +23,34 @@ class Game:
     def __init__(self, window, snake):
         self.win = window
         self.snake = snake
+        self.food = None
+
 
     def random_food(self):
         # Find random (x,y)
         # Error checking - inside border, not on top of snake body
-        pass
+        snake_positions = [sq.pos for sq in self.snake.body]
+        while True:
+            food_x = random.randint(0, ROWS)
+            food_y = random.randint(0, COLS)
+            if (food_x, food_y) not in snake_positions:
+                break
+        new_food = Square((food_x, food_y), WHITE, Action.STOP)
+        self.food = new_food
+        return new_food
+
+
+
+
 
     def redraw_window(self):
         self.win.fill(BLACK)
         self.snake.draw_snake(self.win)
         # Draw Food
+        if not self.food:
+            food = self.random_food()
+
+        self.food.draw_square(self.win)
         self.draw_grid()
         pygame.display.update()
 
@@ -48,6 +66,11 @@ class Game:
     def wall_collide(self, head_pos):
         # Check if out of bounds on any side
         return (head_pos[0] < 0) or (head_pos[0] > ROWS) or (head_pos[1] < 0) or (head_pos[1] > COLS)
+
+    def food_eaten(self, head_pos):
+        if self.food:
+            return head_pos == self.food.pos
+        return False
 
 class Snake:
     def __init__(self, head_pos, head_color, body_color):
@@ -131,7 +154,6 @@ class Square:
     def move(self):
         self.pos = (self.pos[0] + self.direction.value[0], self.pos[1] + self.direction.value[1])
 
-
     def draw_square(self, window):
         pygame.draw.rect(window, self.color,
                          (self.pos[0] * CELL_SIZE + 1,
@@ -160,8 +182,11 @@ def driver():
 
 
 
+
+
     while True:
         # TODO draw food
+        #game.random_food()
         pygame.time.delay(50)
         clock.tick(10)
         game.snake.keyboard_move()
@@ -170,6 +195,13 @@ def driver():
             break
 
         # TODO eat food -> add body segment, increment score counter
+        if game.food_eaten(snake.head.pos):
+            # increment score
+            # add body segment
+            # generate new food
+            game.random_food()
+
+
         #game.snake.add_segment()
 
         if game.snake.body_collide():
