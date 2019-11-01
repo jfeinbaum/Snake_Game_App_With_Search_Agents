@@ -24,6 +24,7 @@ class Game:
         self.win = window
         self.snake = snake
         self.food = None
+        self.score = 0
 
 
     def random_food(self):
@@ -197,6 +198,8 @@ def driver():
         # TODO eat food -> add body segment, increment score counter
         if game.food_eaten(snake.head.pos):
             # increment score
+            game.score += 1
+            print("Score:", game.score)
             # add body segment
             # generate new food
             game.random_food()
