@@ -130,9 +130,11 @@ class Snake:
         # TODO segments should not be able to disconnect from the head of the snake
         previous_tail = self.body[-1]
         direction = previous_tail.direction
-        segment_pos = (previous_tail.pos[0] + direction.value[0],
-                       previous_tail.pos[1] + direction.value[1])
+        segment_pos = (previous_tail.pos[0] - direction.value[0],
+                       previous_tail.pos[1] - direction.value[1])
         self.body.append(Square(segment_pos, self.body_color, direction))
+
+
 
     def draw_snake(self, window):
         for segment in self.body:
@@ -186,13 +188,15 @@ def driver():
 
 
     while True:
-        # TODO draw food
-        #game.random_food()
         pygame.time.delay(50)
         clock.tick(10)
         game.snake.keyboard_move()
         if game.wall_collide(snake.head.pos):
             print("DEATH -- WALL COLLIDE -- GAME OVER")
+            break
+
+        if game.snake.body_collide():
+            print("DEATH -- BODY COLLIDE -- GAME OVER")
             break
 
         # TODO eat food -> add body segment, increment score counter
@@ -201,15 +205,16 @@ def driver():
             game.score += 1
             print("Score:", game.score)
             # add body segment
+            game.snake.add_segment()
+
+
             # generate new food
             game.random_food()
 
 
-        #game.snake.add_segment()
 
-        if game.snake.body_collide():
-            print("DEATH -- BODY COLLIDE -- GAME OVER")
-            break
+
+
 
         game.redraw_window()
 
