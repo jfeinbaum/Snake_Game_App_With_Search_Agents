@@ -47,12 +47,7 @@ class Game:
 
     def wall_collide(self, head_pos):
         # Check if out of bounds on any side
-        if (head_pos[0] < 0 and head_pos[1] < 0) or \
-                (head_pos[0] < 0 and head_pos[1] > HEIGHT) or \
-                (head_pos[0] > WIDTH and head_pos < 0) or \
-                (head_pos[0] > WIDTH and head_pos[1] > HEIGHT):
-            return True
-        return False
+        return (head_pos[0] < 0) or (head_pos[0] > ROWS) or (head_pos[1] < 0) or (head_pos[1] > COLS)
 
 class Snake:
     def __init__(self, head_pos, head_color, body_color):
@@ -136,6 +131,7 @@ class Square:
     def move(self):
         self.pos = (self.pos[0] + self.direction.value[0], self.pos[1] + self.direction.value[1])
 
+
     def draw_square(self, window):
         pygame.draw.rect(window, self.color,
                          (self.pos[0] * CELL_SIZE + 1,
@@ -157,9 +153,12 @@ class Action(Enum):
 
 def driver():
     snake = Snake((10, 10), RED, WHITE)
-    game = Game(pygame.display.set_mode((WIDTH, HEIGHT)), snake)
+    window = pygame.display.set_mode((WIDTH, HEIGHT))
+    game = Game(window, snake)
     game.redraw_window()
     clock = pygame.time.Clock()
+
+
 
     while True:
         # TODO draw food
@@ -171,7 +170,7 @@ def driver():
             break
 
         # TODO eat food -> add body segment, increment score counter
-        game.snake.add_segment()
+        #game.snake.add_segment()
 
         if game.snake.body_collide():
             print("DEATH -- BODY COLLIDE -- GAME OVER")
