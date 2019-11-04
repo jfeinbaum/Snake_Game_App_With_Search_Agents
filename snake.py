@@ -22,8 +22,14 @@ class Game:
     def __init__(self, window, snake):
         self.win = window
         self.snake = snake
-        self.food = None
+        self.food = self.random_food()
         self.score = 0
+
+    def get_state(self):
+        # Call .pos for position (x, y)
+        return {'head': self.snake.body[0],
+                'body': self.snake.body[1:],
+                'food': self.food}
 
     def random_food(self):
         # Find random (x,y)
@@ -191,8 +197,10 @@ def driver():
     while True:
         pygame.time.delay(50)
         clock.tick(10)
-        #game.snake.keyboard_move()
-        game.snake.discrete_move(moves[counter])
+
+        game.snake.keyboard_move()
+        # game.snake.discrete_move(moves[counter])
+
         if game.snake.wall_collide():
             print("DEATH -- WALL COLLIDE -- GAME OVER")
             break
