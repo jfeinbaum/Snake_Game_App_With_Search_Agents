@@ -3,7 +3,6 @@
 
 import pygame
 import random
-import time
 from enum import Enum
 
 # Game Dimensions (rows & cols should evenly divide game board)
@@ -104,7 +103,15 @@ class Snake:
             # Update turns dictionary if a valid press occurred
             if valid_press:
                 self.turns[self.head.pos[:]] = self.direction
+        self.snake_move()
 
+    # TODO work in progress
+    def discrete_move(self, action):
+        self.direction = action
+        self.turns[self.head.pos[:]] = self.direction
+        self.snake_move()
+
+    def snake_move(self):
         # Redirect body segments to follow the turns made by the head
         for i, segment in enumerate(self.body):
             pos = segment.pos
@@ -112,7 +119,6 @@ class Snake:
                 # Set the action stored in turns dict for this position
                 segment.change_direction(self.turns[pos])
                 # After last segment passes, forget the turn
-                # TODO Turns to follow path of head square are not properly forgotten
                 if i == len(self.body) - 1:
                     self.turns.pop(pos)
             # Always move every segment
@@ -178,10 +184,15 @@ def driver():
     game.redraw_window()
     clock = pygame.time.Clock()
 
+    moves = [Action.UP, Action.UP, Action.UP, Action.UP, Action.UP, Action.RIGHT, Action.RIGHT, Action.RIGHT,
+             Action.RIGHT, Action.LEFT, Action.LEFT, Action.LEFT, Action.DOWN, Action.DOWN, Action.DOWN]
+    counter = 0
+
     while True:
         pygame.time.delay(50)
         clock.tick(10)
-        game.snake.keyboard_move()
+        #game.snake.keyboard_move()
+        game.snake.discrete_move(moves[counter])
         if game.snake.wall_collide():
             print("DEATH -- WALL COLLIDE -- GAME OVER")
             break
@@ -200,5 +211,8 @@ def driver():
             game.random_food()
 
         game.redraw_window()
+
+        counter += 1
+
 
 driver()
