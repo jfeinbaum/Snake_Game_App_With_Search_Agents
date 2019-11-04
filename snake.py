@@ -26,7 +26,6 @@ class Game:
         self.food = None
         self.score = 0
 
-
     def random_food(self):
         # Find random (x,y)
         # Error checking - inside border, not on top of snake body
@@ -39,10 +38,6 @@ class Game:
         new_food = Square((food_x, food_y), WHITE, Action.STOP)
         self.food = new_food
         return new_food
-
-
-
-
 
     def redraw_window(self):
         self.win.fill(BLACK)
@@ -64,14 +59,11 @@ class Game:
             pygame.draw.line(self.win, WHITE, (x, 0), (x, WIDTH))
             pygame.draw.line(self.win, WHITE, (0, y), (WIDTH, y))
 
-    def wall_collide(self, head_pos):
-        # Check if out of bounds on any side
-        return (head_pos[0] < 0) or (head_pos[0] > ROWS) or (head_pos[1] < 0) or (head_pos[1] > COLS)
-
     def food_eaten(self, head_pos):
         if self.food:
             return head_pos == self.food.pos
         return False
+
 
 class Snake:
     def __init__(self, head_pos, head_color, body_color):
@@ -133,8 +125,6 @@ class Snake:
                        previous_tail.pos[1] - direction.value[1])
         self.body.append(Square(segment_pos, self.body_color, direction))
 
-
-
     def draw_snake(self, window):
         for segment in self.body:
             segment.draw_square(window)
@@ -143,6 +133,11 @@ class Snake:
         body_positions = [sq.pos for sq in self.body]
         body_positions.remove(self.head.pos)
         return self.head.pos in body_positions
+
+    def wall_collide(self):
+        # Check if out of bounds on any side
+        head_pos = self.body[0].pos
+        return (head_pos[0] < 0) or (head_pos[0] > ROWS) or (head_pos[1] < 0) or (head_pos[1] > COLS)
 
 
 class Square:
@@ -183,15 +178,11 @@ def driver():
     game.redraw_window()
     clock = pygame.time.Clock()
 
-
-
-
-
     while True:
         pygame.time.delay(50)
         clock.tick(10)
         game.snake.keyboard_move()
-        if game.wall_collide(snake.head.pos):
+        if game.snake.wall_collide():
             print("DEATH -- WALL COLLIDE -- GAME OVER")
             break
 
@@ -208,14 +199,6 @@ def driver():
             # generate new food
             game.random_food()
 
-
-
-
-
-
         game.redraw_window()
-
-
-
 
 driver()
