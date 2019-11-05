@@ -137,6 +137,7 @@ class Snake:
 
     # TODO work in progress
     def discrete_move(self, action):
+        pygame.event.get()
         self.direction = action
         self.turns[self.head.pos[:]] = self.direction
         self.snake_move()
@@ -217,16 +218,12 @@ def main():
     # initialize search problem
 
     #problem = searchproblem.SimpleSearchProblem(game, game.get_state())
-    #problem = SimpleSearchProblem(game, game.get_state())
 
     #moves = bfs(problem)
     moves = [Action.UP, Action.DOWN, Action.RIGHT, Action.LEFT] * 10
 
-
-
     counter = 0
 
-    print(moves[0])
 
     while True:
         pygame.time.delay(50)
