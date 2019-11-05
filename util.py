@@ -1,4 +1,6 @@
 import heapq
+from enum import Enum
+
 
 '''
 List data structure with LIFO policy
@@ -54,3 +56,16 @@ class PriorityQueue:
 
     def isEmpty(self):
         return len(self.queue) == 0
+
+
+class Action(Enum):
+    # Also referred to as direction,
+    # Up and down are inverted here to reflect the graphics on the screen
+    # Use .value[0] and .value[1] to access x,y from an action enum
+    UP = (0, -1)
+    DOWN = (0, 1)
+    LEFT = (-1, 0)
+    RIGHT = (1, 0)
+    STOP = (0, 0)
+
+

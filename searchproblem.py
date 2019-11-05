@@ -1,6 +1,5 @@
-from snake import Game
-from snake import Snake
-from snake import Action
+from util import Action
+
 
 # Game Dimensions (rows & cols should evenly divide game board)
 WIDTH = 600
@@ -46,9 +45,15 @@ class SearchProblem:
         pass
 
 
+
+def get_moves():
+    return [Action.UP, Action.DOWN, Action.RIGHT, Action.LEFT]
+
+
 class SimpleSearchProblem(SearchProblem):
 
-    def __init_(self, starting_state):
+    def __init__(self, game, starting_state):
+        self.game = game
         self.start_state = starting_state
 
 
@@ -56,10 +61,28 @@ class SimpleSearchProblem(SearchProblem):
         return self.start_state
 
     def is_goal_state(self, state):
-        return len(state['body']) == (ROWS * COLS) - 1
+
+        return state['head'].get_pos() == state['food']
 
     def get_successors(self, state):
-        pass
+        successors = []
+
+
+        for action in get_moves():
+
+            successor = self.game.get_new_state(action)
+            new_snake = successor['snake']
+            if new_snake.wall_collide() or new_snake.body_collide():
+                cost = 999
+            else:
+                cost = 1
+            successors.append((successor, action, cost))
+
+        return successors
+
+
+
+
 
     def get_cost_of_actions(self, actions):
         pass

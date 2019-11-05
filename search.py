@@ -7,7 +7,7 @@ Returns: search path, a sequence of actions
 '''
 def dfs(problem):
     # Initialize problem, pushing first node to frontier
-    initial_node = (problem.getStartState(), [])
+    initial_node = (problem.get_start_state(), [])
     frontier = util.Stack()
     frontier.push(initial_node)
     explored = []
@@ -18,10 +18,10 @@ def dfs(problem):
         current_node_path = current_node[1]
         explored.append(current_node_state)
 
-        if problem.isGoalState(current_node_state):
+        if problem.is_goal_state(current_node_state):
             return current_node_path
 
-        for successor in problem.getSuccessors(current_node_state):
+        for successor in problem.get_successors(current_node_state):
             action = successor[1]
             next_state = successor[0]
 
@@ -51,7 +51,7 @@ Returns: search path, a sequence of actions
 '''
 def bfs(problem):
     # Initialize problem, pushing first node to frontier
-    initial_node = (problem.getStartState(), [])
+    initial_node = (problem.get_start_state(), [])
     frontier = util.Queue()
     frontier.push(initial_node)
     explored = []
@@ -62,12 +62,21 @@ def bfs(problem):
         current_node_path = current_node[1]
         explored.append(current_node_state)
 
-        if problem.isGoalState(current_node_state):
+        body_str = ""
+        for tup in current_node_state['body']:
+            body_str += str(tup)
+
+        print("Current body: " + body_str)
+
+        if problem.is_goal_state(current_node_state):
             return current_node_path
 
-        for successor in problem.getSuccessors(current_node_state):
+        for successor in problem.get_successors(current_node_state):
+
             action = successor[1]
             next_state = successor[0]
+
+
 
             if next_state not in explored:
 

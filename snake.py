@@ -3,7 +3,11 @@
 
 import pygame
 import random
-from enum import Enum
+from copy import deepcopy
+import searchproblem
+from util import Action
+from search import dfs
+from search import bfs
 
 # Game Dimensions (rows & cols should evenly divide game board)
 WIDTH = 600
@@ -27,9 +31,28 @@ class Game:
 
     def get_state(self):
         # Call .pos for position (x, y)
+
         return {'head': self.snake.body[0],
                 'body': self.snake.body[1:],
-                'food': self.food}
+                'food': self.food,
+                'snake': self.snake}
+
+    def get_new_state(self, action):
+        new_state = {}
+        new_snake = deepcopy(self.snake)
+
+        new_snake.discrete_move(action)
+        new_state['head'] = new_snake.head
+        new_state['body'] = new_snake.body
+        new_state['food'] = self.food.pos
+        new_state['snake'] = new_snake
+
+        return new_state
+
+
+
+
+
 
     def random_food(self):
         # Find random (x,y)
@@ -79,6 +102,7 @@ class Snake:
         self.head = Square(head_pos, head_color, self.direction)
         self.body = [self.head]
         self.turns = {}
+
 
     def reset(self):
         self.direction = Action.STOP
@@ -158,6 +182,9 @@ class Square:
         self.color = color
         self.direction = action
 
+    def __str__(self):
+        return str(self.pos)
+
     def change_direction(self, action):
         self.direction = action
 
@@ -171,36 +198,43 @@ class Square:
                           CELL_SIZE - 2,
                           CELL_SIZE - 2))
 
-
-class Action(Enum):
-    # Also referred to as direction,
-    # Up and down are inverted here to reflect the graphics on the screen
-    # Use .value[0] and .value[1] to access x,y from an action enum
-    UP = (0, -1)
-    DOWN = (0, 1)
-    LEFT = (-1, 0)
-    RIGHT = (1, 0)
-    STOP = (0, 0)
+    def get_pos(self):
+        return self.pos
 
 
-def driver():
+
+
+def main():
     snake = Snake((10, 10), RED,RED)
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(window, snake)
     game.redraw_window()
     clock = pygame.time.Clock()
 
-    moves = [Action.UP, Action.UP, Action.UP, Action.UP, Action.UP, Action.RIGHT, Action.RIGHT, Action.RIGHT,
-             Action.RIGHT, Action.LEFT, Action.LEFT, Action.LEFT, Action.DOWN, Action.DOWN, Action.DOWN]
+
+
+
+    # initialize search problem
+
+    #problem = searchproblem.SimpleSearchProblem(game, game.get_state())
+    #problem = SimpleSearchProblem(game, game.get_state())
+
+    #moves = bfs(problem)
+    moves = [Action.UP, Action.DOWN, Action.RIGHT, Action.LEFT] * 10
+
+
+
     counter = 0
+
+    print(moves[0])
 
     while True:
         pygame.time.delay(50)
         clock.tick(10)
 
-        game.snake.keyboard_move()
-        # game.snake.discrete_move(moves[counter])
-
+        #game.snake.keyboard_move()
+        game.snake.discrete_move(moves[counter])
+        print(counter)
         if game.snake.wall_collide():
             print("DEATH -- WALL COLLIDE -- GAME OVER")
             break
@@ -220,7 +254,8 @@ def driver():
 
         game.redraw_window()
 
+
         counter += 1
 
 
-driver()
+main()
