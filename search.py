@@ -62,23 +62,27 @@ def bfs(problem):
         current_node_path = current_node[1]
         explored.append(current_node_state)
 
-        body_str = ""
-        for tup in current_node_state['body']:
-            body_str += str(tup)
 
-        print("Current body: " + body_str)
+        print("Current node popped from frontier:", current_node_state['head'])
+
+
 
         if problem.is_goal_state(current_node_state):
             return current_node_path
+
 
         for successor in problem.get_successors(current_node_state):
 
             action = successor[1]
             next_state = successor[0]
 
+            print("Successor state of",current_node_state['head'],":", next_state['head'])
+
 
 
             if next_state not in explored:
+
+
 
                 # Check if the frontier contains a node with the next state
                 # If so, set boolean which prevents adding to frontier
@@ -92,6 +96,8 @@ def bfs(problem):
                     current = frontier.pop()
                     if current[0] == next_state:
                         frontier_contains_next_state = True
+
+
                     temp_queue.push(current)
 
                 while not temp_queue.isEmpty():
@@ -101,6 +107,9 @@ def bfs(problem):
                     frontier.push((next_state, current_node_path + [action]))
 
 
+
+
+
 '''
 Search the node of least total cost first
 Input: search problem
@@ -108,7 +117,7 @@ Returns: search path, a sequence of actions
 '''
 def ucs(problem):
     # Initialize problem, pushing first node to frontier
-    initial_node = (problem.getStartState(), [], 0)
+    initial_node = (problem.get_start_state(), [], 0)
     frontier = util.PriorityQueue()
     frontier.push(initial_node, 0)
     explored = []
@@ -121,10 +130,10 @@ def ucs(problem):
         current_node_cost = current_node[2]
         explored.append(current_node_state)
 
-        if problem.isGoalState(current_node_state):
+        if problem.is_goal_state(current_node_state):
             return current_node_path
 
-        for successor in problem.getSuccessors(current_node_state):
+        for successor in problem.get_successors(current_node_state):
             action = successor[1]
             next_state = successor[0]
             step_cost = successor[2]

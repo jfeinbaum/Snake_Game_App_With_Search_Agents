@@ -62,7 +62,10 @@ class SimpleSearchProblem(SearchProblem):
 
     def is_goal_state(self, state):
 
-        return state['head'].get_pos() == state['food']
+
+        #return state['head'].get_pos() == state['food']
+        return state['head'] == state['food']
+
 
     def get_successors(self, state):
         successors = []
@@ -71,12 +74,14 @@ class SimpleSearchProblem(SearchProblem):
         for action in get_moves():
 
             successor = self.game.get_new_state(action)
-            new_snake = successor['snake']
-            if new_snake.wall_collide() or new_snake.body_collide():
-                cost = 999
-            else:
-                cost = 1
-            successors.append((successor, action, cost))
+
+
+            #if new_snake.wall_collide() or new_snake.body_collide():
+                #cost = 999
+            #else:
+                #cost = 1
+            #successors.append((successor, action, cost))
+            successors.append((successor, action, 0))
 
         return successors
 

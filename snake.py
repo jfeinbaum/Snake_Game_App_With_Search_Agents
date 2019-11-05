@@ -6,8 +6,7 @@ import random
 from copy import deepcopy
 import searchproblem
 from util import Action
-from search import dfs
-from search import bfs
+from search import *
 
 # Game Dimensions (rows & cols should evenly divide game board)
 WIDTH = 600
@@ -32,20 +31,34 @@ class Game:
     def get_state(self):
         # Call .pos for position (x, y)
 
-        return {'head': self.snake.body[0],
-                'body': self.snake.body[1:],
-                'food': self.food,
-                'snake': self.snake}
+        return {'head': self.snake.body[0].pos,
+                'body': [self.snake.body[i].pos for i in range(1, len(self.snake.body))],
+                'food': self.food.pos}
+
+
+
+
+
 
     def get_new_state(self, action):
+
+
+        #TODO: THIS IS FUCKED
+
+
+
+
+
+
+
         new_state = {}
-        new_snake = deepcopy(self.snake)
+        #new_snake = deepcopy(self.snake)
+        new_snake = self.snake.snake_copy()
 
         new_snake.discrete_move(action)
-        new_state['head'] = new_snake.head
-        new_state['body'] = new_snake.body
+        new_state['head'] = new_snake.body[0].pos
+        new_state['body'] = [new_snake.body[i].pos for i in range(1, len(new_snake.body))]
         new_state['food'] = self.food.pos
-        new_state['snake'] = new_snake
 
         return new_state
 
@@ -102,6 +115,16 @@ class Snake:
         self.head = Square(head_pos, head_color, self.direction)
         self.body = [self.head]
         self.turns = {}
+
+    def snake_copy(self):
+        copy = Snake(self.head.pos, self.head_color, self.body_color)
+
+        copy.head = Square(self.head.pos, self.head_color, self.direction)
+        copy.body = deepcopy(self.body)
+        copy.turns = deepcopy(self.turns)
+
+        return copy
+
 
 
     def reset(self):
@@ -217,10 +240,12 @@ def main():
 
     # initialize search problem
 
-    #problem = searchproblem.SimpleSearchProblem(game, game.get_state())
+    problem = searchproblem.SimpleSearchProblem(game, game.get_state())
 
-    #moves = bfs(problem)
-    moves = [Action.UP, Action.DOWN, Action.RIGHT, Action.LEFT] * 10
+
+    moves = bfs(problem)
+    print(moves)
+
 
     counter = 0
 
