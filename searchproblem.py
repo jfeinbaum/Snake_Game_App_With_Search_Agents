@@ -61,3 +61,6 @@ class SimpleSearchProblem(SearchProblem):
     def get_successors(self, state):
         pass
 
+    def get_cost_of_actions(self, actions):
+        pass
+
