@@ -1,12 +1,5 @@
 from util import Action
-
-
-# Game Dimensions (rows & cols should evenly divide game board)
-WIDTH = 600
-HEIGHT = 600
-ROWS = 30
-COLS = 30
-CELL_SIZE = WIDTH // ROWS
+from setup import *
 
 '''
 Abstract class for a generic search problem.
