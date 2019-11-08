@@ -131,7 +131,7 @@ class Snake:
 
     # TODO work in progress
     def discrete_move(self, action):
-        #pygame.event.get()
+        pygame.event.get()
         self.direction = action
         self.turns[self.head.pos[:]] = self.direction
         self.snake_move()
@@ -198,7 +198,7 @@ class Square:
 
 
 
-
+# The original driver
 def main():
     snake = Snake((10, 10), RED,RED)
     window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -206,21 +206,12 @@ def main():
     game.redraw_window()
     clock = pygame.time.Clock()
 
-
-
-
     # initialize search problem
-
     problem = searchproblem.SimpleSearchProblem(game, game.get_state())
-
-
     moves = bfs(problem)
     print(moves)
 
-
     counter = 0
-
-
     while True:
         pygame.time.delay(50)
         clock.tick(10)
@@ -246,9 +237,47 @@ def main():
             game.random_food()
 
         game.redraw_window()
-
-
         counter += 1
 
+# TODO food right next to body encounters infinite loop because no moves are selected
+def bfs_driver():
+    snake = Snake((10, 10), RED,RED)
+    window = pygame.display.set_mode((WIDTH, HEIGHT))
+    game = Game(window, snake)
+    game.redraw_window()
+    clock = pygame.time.Clock()
 
-main()
+    while True:
+        # initialize search problem
+        problem = searchproblem.SimpleSearchProblem(game, game.get_state())
+        moves = bfs(problem)
+        print(moves)
+
+        for i in range(len(moves)):
+
+            pygame.time.delay(50)
+            clock.tick(10)
+
+            #game.snake.keyboard_move()
+            game.snake.discrete_move(moves[i])
+            print(i)
+            if game.snake.wall_collide():
+                print("DEATH -- WALL COLLIDE -- GAME OVER")
+                break
+
+            if game.snake.body_collide():
+                print("DEATH -- BODY COLLIDE -- GAME OVER")
+                break
+
+            if game.food_eaten(snake.head.pos):
+                # increment score
+                game.score += 1
+                print("Score:", game.score)
+                # add body segment
+                game.snake.add_segment()
+                # generate new food
+                game.random_food()
+
+            game.redraw_window()
+
+bfs_driver()
