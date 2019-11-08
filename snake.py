@@ -37,7 +37,7 @@ class Game:
             food_y = random.randint(1, COLS-1)
             if (food_x, food_y) not in snake_positions:
                 break
-        new_food = Square((food_x, food_y), WHITE, Action.STOP)
+        new_food = Square((food_x, food_y), GREEN, Action.STOP)
         self.food = new_food
         return new_food
 
@@ -230,7 +230,7 @@ def main():
 
 # TODO food right next to body encounters infinite loop because no moves are selected
 def search_driver(function):
-    snake = Snake(START_POS, RED,RED)
+    snake = Snake(START_POS, WHITE, RED)
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(window, snake)
     game.redraw_window()
@@ -273,4 +273,4 @@ def search_driver(function):
             game.redraw_window()
 
 
-search_driver(bfs)
+search_driver(ucs)

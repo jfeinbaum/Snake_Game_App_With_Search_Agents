@@ -64,12 +64,12 @@ class SimpleSearchProblem(SearchProblem):
         successors = []
         for action in get_moves():
             successor = self.game.get_new_state(state, action)
-            #if new_snake.wall_collide() or new_snake.body_collide():
-                #cost = 999
-            #else:
-                #cost = 1
-            #successors.append((successor, action, cost))
-            successors.append((successor, action, 0))
+            if successor['snake'].wall_collide() or successor['snake'].body_collide():
+                cost = 999
+            else:
+                cost = 1
+            successors.append((successor, action, cost))
+            #successors.append((successor, action, 0))
 
         return successors
 
