@@ -268,3 +268,4 @@ def search_driver(function):
 
 
 search_driver(ucs)
+#manual_game()
