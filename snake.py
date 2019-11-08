@@ -157,7 +157,7 @@ class Snake:
     def wall_collide(self):
         # Check if out of bounds on any side
         head_pos = self.body[0].pos
-        return (head_pos[0] < 0) or (head_pos[0] > ROWS) or (head_pos[1] < 0) or (head_pos[1] > COLS)
+        return (head_pos[0] < 0) or (head_pos[0] > ROWS - 1) or (head_pos[1] < 0) or (head_pos[1] > COLS - 1)
 
 
 class Square:
@@ -222,6 +222,7 @@ def manual_game():
         game.redraw_window()
         counter += 1
 
+
 # TODO food right next to body encounters infinite loop because no moves are selected
 def search_driver(function):
     snake = Snake(START_POS, WHITE, RED)
@@ -235,16 +236,12 @@ def search_driver(function):
         # initialize search problem
         problem = searchproblem.SimpleSearchProblem(game, game.get_state())
         moves = function(problem)
-        #print(moves)
 
         for i in range(len(moves)):
-
+            print(game.snake.head.pos)
             pygame.time.delay(50)
             clock.tick(10)
-
-            #game.snake.keyboard_move()
             game.snake.discrete_move(moves[i])
-            #print(i)
             if game.snake.wall_collide():
                 print("DEATH -- WALL COLLIDE -- GAME OVER")
                 dead = True
