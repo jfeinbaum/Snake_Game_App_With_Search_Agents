@@ -246,12 +246,13 @@ def bfs_driver():
     game = Game(window, snake)
     game.redraw_window()
     clock = pygame.time.Clock()
+    dead = False
 
-    while True:
+    while not dead:
         # initialize search problem
         problem = searchproblem.SimpleSearchProblem(game, game.get_state())
         moves = bfs(problem)
-        print(moves)
+        #print(moves)
 
         for i in range(len(moves)):
 
@@ -260,13 +261,15 @@ def bfs_driver():
 
             #game.snake.keyboard_move()
             game.snake.discrete_move(moves[i])
-            print(i)
+            #print(i)
             if game.snake.wall_collide():
                 print("DEATH -- WALL COLLIDE -- GAME OVER")
+                dead = True
                 break
 
             if game.snake.body_collide():
                 print("DEATH -- BODY COLLIDE -- GAME OVER")
+                dead = True
                 break
 
             if game.food_eaten(snake.head.pos):
@@ -279,5 +282,6 @@ def bfs_driver():
                 game.random_food()
 
             game.redraw_window()
+
 
 bfs_driver()
