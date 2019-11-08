@@ -188,26 +188,20 @@ class Square:
 
 
 # The original driver
-def main():
+def manual_game():
     snake = Snake(START_POS, RED,RED)
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(window, snake)
     game.redraw_window()
     clock = pygame.time.Clock()
 
-    # initialize search problem
-    problem = searchproblem.SimpleSearchProblem(game, game.get_state())
-    moves = bfs(problem)
-    print(moves)
-
     counter = 0
     while True:
         pygame.time.delay(50)
         clock.tick(10)
 
-        #game.snake.keyboard_move()
-        game.snake.discrete_move(moves[counter])
-        print(counter)
+        game.snake.keyboard_move()
+
         if game.snake.wall_collide():
             print("DEATH -- WALL COLLIDE -- GAME OVER")
             break
