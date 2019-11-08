@@ -35,7 +35,8 @@ def dfs(problem):
                 temp_stack = util.Stack()
                 while not frontier.isEmpty():
                     current = frontier.pop()
-                    if current[0] == next_state:
+                    #if current[0] == next_state:
+                    if current[0]['snake'].head.pos == next_state['snake'].head.pos:
                         break
                     temp_stack.push(current)
                 while not temp_stack.isEmpty():
@@ -140,7 +141,8 @@ def ucs(problem):
 
                 while not frontier.isEmpty():
                     current = frontier.pop()
-                    if current[0] == next_state:
+                    #if current[0] == next_state:
+                    if current[0]['snake'].head.pos == next_state['snake'].head.pos:
                         frontier_contains_next_state = True
                         if current[2] > next_cost:
                             temp_queue.push(next_node, next_cost)

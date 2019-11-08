@@ -229,7 +229,7 @@ def main():
         counter += 1
 
 # TODO food right next to body encounters infinite loop because no moves are selected
-def bfs_driver():
+def search_driver(function):
     snake = Snake(START_POS, RED,RED)
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(window, snake)
@@ -240,7 +240,7 @@ def bfs_driver():
     while not dead:
         # initialize search problem
         problem = searchproblem.SimpleSearchProblem(game, game.get_state())
-        moves = bfs(problem)
+        moves = function(problem)
         #print(moves)
 
         for i in range(len(moves)):
@@ -273,4 +273,4 @@ def bfs_driver():
             game.redraw_window()
 
 
-bfs_driver()
+search_driver(bfs)
