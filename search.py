@@ -62,27 +62,15 @@ def bfs(problem):
         current_node_path = current_node[1]
         explored.append(current_node_state)
 
-
-        print("Current node popped from frontier:", current_node_state['head'])
-
-
-
         if problem.is_goal_state(current_node_state):
             return current_node_path
-
 
         for successor in problem.get_successors(current_node_state):
 
             action = successor[1]
             next_state = successor[0]
 
-            print("Successor state of",current_node_state['head'],":", next_state['head'])
-
-
-
             if next_state not in explored:
-
-
 
                 # Check if the frontier contains a node with the next state
                 # If so, set boolean which prevents adding to frontier
@@ -94,9 +82,8 @@ def bfs(problem):
 
                 while not frontier.isEmpty():
                     current = frontier.pop()
-                    if current[0] == next_state:
+                    if current[0]['snake'].head.pos == next_state['snake'].head.pos:
                         frontier_contains_next_state = True
-
 
                     temp_queue.push(current)
 

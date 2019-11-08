@@ -30,42 +30,14 @@ class Game:
 
     def get_state(self):
         # Call .pos for position (x, y)
-
-        return {'head': self.snake.body[0].pos,
-                'body': [self.snake.body[i].pos for i in range(1, len(self.snake.body))],
+        return {'snake': self.snake.snake_copy(),
                 'food': self.food.pos}
 
-
-
-
-
-
-    def get_new_state(self, action):
-
-
-        #TODO: THIS IS FUCKED
-
-
-
-
-
-
-
-        new_state = {}
-        #new_snake = deepcopy(self.snake)
-        new_snake = self.snake.snake_copy()
-
-        new_snake.discrete_move(action)
-        new_state['head'] = new_snake.body[0].pos
-        new_state['body'] = [new_snake.body[i].pos for i in range(1, len(new_snake.body))]
-        new_state['food'] = self.food.pos
-
-        return new_state
-
-
-
-
-
+    def get_new_state(self, state, action):
+        successor_snake = state['snake'].snake_copy()
+        successor_snake.discrete_move(action)
+        return {'snake': successor_snake,
+                'food': state['food']}
 
     def random_food(self):
         # Find random (x,y)
@@ -118,11 +90,10 @@ class Snake:
 
     def snake_copy(self):
         copy = Snake(self.head.pos, self.head_color, self.body_color)
-
-        copy.head = Square(self.head.pos, self.head_color, self.direction)
+        # copy.head = Square(self.head.pos, self.head_color, self.direction)
         copy.body = deepcopy(self.body)
+        copy.head = copy.body[0]
         copy.turns = deepcopy(self.turns)
-
         return copy
 
 
@@ -160,7 +131,7 @@ class Snake:
 
     # TODO work in progress
     def discrete_move(self, action):
-        pygame.event.get()
+        #pygame.event.get()
         self.direction = action
         self.turns[self.head.pos[:]] = self.direction
         self.snake_move()
