@@ -189,7 +189,7 @@ class Square:
 
 # The original driver
 def main():
-    snake = Snake((10, 10), RED,RED)
+    snake = Snake(START_POS, RED,RED)
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(window, snake)
     game.redraw_window()
@@ -230,7 +230,7 @@ def main():
 
 # TODO food right next to body encounters infinite loop because no moves are selected
 def bfs_driver():
-    snake = Snake((10, 10), RED,RED)
+    snake = Snake(START_POS, RED,RED)
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(window, snake)
     game.redraw_window()

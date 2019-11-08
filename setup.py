@@ -5,6 +5,9 @@ ROWS = 10
 COLS = 10
 CELL_SIZE = WIDTH // ROWS
 
+# Starting position
+START_POS = (5, 5)
+
 # Color tuples
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
