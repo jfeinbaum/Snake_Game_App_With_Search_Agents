@@ -238,7 +238,7 @@ def search_driver(function):
         moves = function(problem)
 
         for i in range(len(moves)):
-            print(game.snake.head.pos)
+
             pygame.time.delay(50)
             clock.tick(10)
             game.snake.discrete_move(moves[i])
@@ -263,6 +263,8 @@ def search_driver(function):
 
             game.redraw_window()
 
+    print("FINAL SCORE:", game.score)
 
-search_driver(ucs)
+
+search_driver(astar)
 #manual_game()

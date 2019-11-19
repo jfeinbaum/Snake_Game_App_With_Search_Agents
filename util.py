@@ -68,4 +68,13 @@ class Action(Enum):
     RIGHT = (1, 0)
     STOP = (0, 0)
 
+'''
+Returns the Manhattan distance between points xy1 and xy2
+'''
+def manhattanDistance( state ):
+    xy1 = state['snake'].head.pos
+    xy2 = state['food']
+    return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
+
+
 
