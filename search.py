@@ -1,5 +1,6 @@
 import util
 
+
 '''
 Searchest the deepest nodes in the search tree first
 Input: search problem
