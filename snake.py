@@ -8,6 +8,7 @@ import searchproblem
 from util import Action
 from search import *
 from setup import *
+from util import Log
 
 
 class Game:
@@ -232,10 +233,15 @@ def search_driver(function):
     clock = pygame.time.Clock()
     dead = False
 
+    log = Log(function.__name__)
+
     while not dead:
         # initialize search problem
+
+        log.start_stopwatch()
         problem = searchproblem.SimpleSearchProblem(game, game.get_state())
         moves = function(problem)
+        log.stop_stopwatch()
 
         for i in range(len(moves)):
 
@@ -245,17 +251,22 @@ def search_driver(function):
             if game.snake.wall_collide():
                 print("DEATH -- WALL COLLIDE -- GAME OVER")
                 dead = True
+                log.terminate("Wall Collision")
                 break
 
             if game.snake.body_collide():
                 print("DEATH -- BODY COLLIDE -- GAME OVER")
                 dead = True
+                log.terminate("Body Collision")
                 break
 
             if game.food_eaten(snake.head.pos):
                 # increment score
                 game.score += 1
                 print("Score:", game.score)
+
+                log.update(game.score)
+
                 # add body segment
                 game.snake.add_segment()
                 # generate new food
@@ -264,7 +275,10 @@ def search_driver(function):
             game.redraw_window()
 
     print("FINAL SCORE:", game.score)
+    print(log)
+    return log
 
 
-search_driver(astar)
+log = search_driver(astar)
+log.save("log.txt")
 #manual_game()

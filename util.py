@@ -1,4 +1,5 @@
 import heapq
+import time
 from enum import Enum
 
 
@@ -77,4 +78,50 @@ def manhattanDistance( state ):
     return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
 
 
+'''
+Class to log information about the
+'''
 
+class Log:
+
+    def __init__(self, algo_name):
+        self.algo_name = algo_name
+        self.record = []
+        self.death = None
+        self.start_time = None
+        self.end_time = None
+
+    def __str__(self):
+        cat = ""
+        cat += "Algorithm: " + self.algo_name + "\n"
+        cat += "-------------------\n"
+        total_time = 0
+        for i in range(len(self.record)):
+            total_time += self.record[i][0]
+            cat += "Turn " + str(i + 1) + ":\n"
+            cat += "\tTime:  " + str(self.record[i][0]) + "\n"
+            cat += "\tScore: " + str(self.record[i][1]) + "\n"
+        cat += "-------------------\n"
+        cat += "Summary:\n"
+        cat += "Cause of Death:  " + self.death + "\n"
+        cat += "Total Time:      " + str(total_time) + " seconds\n"
+        cat += "Average Time   : " + str(total_time/len(self.record)) + " seconds\n"
+        cat += "\n\n" + "-" * 120 + "\n\n"
+        return cat
+
+    def start_stopwatch(self):
+        self.start_time = time.clock()
+
+    def stop_stopwatch(self):
+        self.end_time = time.clock()
+
+    def update(self, score):
+        self.record.append((self.end_time - self.start_time, score))
+
+    def terminate(self, reason):
+        self.death = reason
+
+    def save(self, filename):
+        file = open(filename, 'a')
+        file.write(str(self))
+        file.close()
