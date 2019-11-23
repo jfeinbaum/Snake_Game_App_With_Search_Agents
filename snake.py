@@ -225,7 +225,7 @@ def manual_game():
 
 
 # TODO food right next to body encounters infinite loop because no moves are selected
-def search_driver(function):
+def search_driver(function, heuristic=util.manhattanDistance):
     snake = Snake(START_POS, WHITE, RED)
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(window, snake)
@@ -240,7 +240,7 @@ def search_driver(function):
 
         log.start_stopwatch()
         problem = searchproblem.SimpleSearchProblem(game, game.get_state())
-        moves = function(problem)
+        moves = function(problem, heuristic)
         log.stop_stopwatch()
 
         for i in range(len(moves)):
@@ -279,6 +279,6 @@ def search_driver(function):
     return log
 
 
-log = search_driver(astar)
+log = search_driver(astar, util.foodTrappedHeuristic)
 log.save("log.txt")
 #manual_game()

@@ -6,7 +6,7 @@ Searchest the deepest nodes in the search tree first
 Input: search problem
 Returns: search path, a sequence of actions
 '''
-def dfs(problem):
+def dfs(problem, heuristic=None):
     # Initialize problem, pushing first node to frontier
     initial_node = (problem.get_start_state(), [])
     frontier = util.Stack()
@@ -51,7 +51,7 @@ Search the shallowest nodes in the search tree first
 Input: search problem
 Returns: search path, a sequence of actions
 '''
-def bfs(problem):
+def bfs(problem, heuristic=None):
     # Initialize problem, pushing first node to frontier
     initial_node = (problem.get_start_state(), [])
     frontier = util.Queue()
@@ -104,7 +104,7 @@ Search the node of least total cost first
 Input: search problem
 Returns: search path, a sequence of actions
 '''
-def ucs(problem):
+def ucs(problem, heuristic=None):
     # Initialize problem, pushing first node to frontier
     initial_node = (problem.get_start_state(), [], 0)
     frontier = util.PriorityQueue()
@@ -168,7 +168,7 @@ Search the node that has the lowest combined cost and heuristic first.
 Input: search problem, heuristic function
 Returns: search path, a sequence of actions
 '''
-def astar(problem, heuristic=util.manhattanDistance):
+def astar(problem, heuristic):
 
     # Initialize problem, pushing first node to frontier
     initial_node = (problem.get_start_state(), [], 0)

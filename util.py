@@ -1,6 +1,7 @@
 import heapq
 import time
 from enum import Enum
+from setup import *
 
 
 '''
@@ -77,6 +78,57 @@ def manhattanDistance( state ):
     xy2 = state['food']
     return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
 
+
+
+'''
+If the food is covered on 3 sides, count from the last segment
+bordering the food until the tail is reached so the food is freed;
+Returns that count minus manhattan distance
+'''
+def foodTrappedHeuristic( state ):
+    manhattan = manhattanDistance(state)
+    adjacent_positions = adjacent_to_food(state['food'])
+    adjacent_segments = trapped_food(state['snake'].body, adjacent_positions)
+    if len(adjacent_segments) >= 3:
+        max_i = 0
+        for pos, i in enumerate(state['snake'].body):
+            if pos in adjacent_segments:
+                if i > max_i:
+                    max_i = i
+        rem_segments = len(state['snake'].body[max_i:])
+        return rem_segments - manhattan
+    else:
+        return manhattan
+
+
+
+
+
+
+
+'''
+Returns the 4 coordinates adjacent to the current food position.
+'''
+def adjacent_to_food( food_pos ):
+    right = (food_pos[0]+1, food_pos[1])
+    left = (food_pos[0]-1, food_pos[1])
+    up = (food_pos[0], food_pos[1]-1)
+    down = (food_pos[0], food_pos[1]+1)
+    return [right, left, up, down]
+
+'''
+Returns the body segments adjacent to the food
+'''
+def trapped_food (body, adjacents):
+    hits = []
+    for adj in adjacents:
+        if adj in body or out_of_bounds(adj):
+            hits.append(adj)
+    return hits
+
+
+def out_of_bounds(pos):
+    return pos[0] < 0 or pos[1] < 0 or pos[0] >= ROWS or pos[1] >= COLS
 
 '''
 Class to log information about the
