@@ -233,7 +233,7 @@ def search_driver(function, heuristic=util.manhattanDistance):
     clock = pygame.time.Clock()
     dead = False
 
-    log = Log(function.__name__)
+    log = Log(function.__name__, heuristic.__name__)
 
     while not dead:
         # initialize search problem

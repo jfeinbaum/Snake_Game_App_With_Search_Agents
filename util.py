@@ -81,22 +81,22 @@ def manhattanDistance( state ):
 
 
 '''
-If the food is covered on 3 sides, count from the last segment
+If the food is covered on 2 or more sides, count from the last segment
 bordering the food until the tail is reached so the food is freed;
-Returns that count minus manhattan distance
+Returns manhattan distance minus that count
 '''
 def foodTrappedHeuristic( state ):
     manhattan = manhattanDistance(state)
     adjacent_positions = adjacent_to_food(state['food'])
     adjacent_segments = trapped_food(state['snake'].body, adjacent_positions)
-    if len(adjacent_segments) >= 3:
+    if len(adjacent_segments) >= 2:
         max_i = 0
         for pos, i in enumerate(state['snake'].body):
             if pos in adjacent_segments:
                 if i > max_i:
                     max_i = i
         rem_segments = len(state['snake'].body[max_i:])
-        return rem_segments - manhattan
+        return manhattan - rem_segments
     else:
         return manhattan
 
@@ -126,7 +126,9 @@ def trapped_food (body, adjacents):
             hits.append(adj)
     return hits
 
-
+'''
+Returns true if the given position is out of game bounds, false otherwise
+'''
 def out_of_bounds(pos):
     return pos[0] < 0 or pos[1] < 0 or pos[0] >= ROWS or pos[1] >= COLS
 
@@ -136,8 +138,9 @@ Class to log information about the
 
 class Log:
 
-    def __init__(self, algo_name):
+    def __init__(self, algo_name, heuristic=None):
         self.algo_name = algo_name
+        self.heuristic = heuristic
         self.record = []
         self.death = None
         self.start_time = None
@@ -146,6 +149,8 @@ class Log:
     def __str__(self):
         cat = ""
         cat += "Algorithm: " + self.algo_name + "\n"
+        if self.heuristic:
+            cat += "Heuristic: " + self.heuristic + "\n"
         cat += "-------------------\n"
         total_time = 0
         for i in range(len(self.record)):
