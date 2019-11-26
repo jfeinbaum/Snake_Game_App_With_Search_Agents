@@ -151,6 +151,26 @@ class Log:
         cat += "Algorithm: " + self.algo_name + "\n"
         if self.heuristic:
             cat += "Heuristic: " + self.heuristic + "\n"
+        total_time = 0
+        score = 0
+        times = []
+        for i in range(len(self.record)):
+            total_time += self.record[i][0]
+            score = i
+            times.append(str(self.record[i][0]))
+        cat += "Score: " + str(score) + "\n"
+        cat += "Times: " + str(times) + "\n"
+        cat += "Cause of Death:  " + self.death + "\n"
+        cat += "Total Time:      " + str(total_time) + " seconds\n"
+        cat += "Average Time: " + str(total_time/len(self.record)) + " seconds\n"
+        cat += "-" * 100 + "\n"
+        return cat
+
+    def readable_stats(self):
+        cat = ""
+        cat += "Algorithm: " + self.algo_name + "\n"
+        if self.heuristic:
+            cat += "Heuristic: " + self.heuristic + "\n"
         cat += "-------------------\n"
         total_time = 0
         for i in range(len(self.record)):
@@ -163,7 +183,7 @@ class Log:
         cat += "Cause of Death:  " + self.death + "\n"
         cat += "Total Time:      " + str(total_time) + " seconds\n"
         cat += "Average Time   : " + str(total_time/len(self.record)) + " seconds\n"
-        cat += "\n\n" + "-" * 120 + "\n\n"
+        cat += "\n\n" + "-" * 100 + "\n\n"
         return cat
 
     def start_stopwatch(self):

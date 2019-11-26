@@ -279,6 +279,83 @@ def search_driver(function, heuristic=util.manhattanDistance):
     return log
 
 
-log = search_driver(astar, util.foodTrappedHeuristic)
-log.save("log.txt")
+# log = search_driver(astar, util.foodTrappedHeuristic)
+# log.save("log.txt")
 #manual_game()
+
+
+def no_display_run(function, run_number, heuristic=util.manhattanDistance):
+    print("Begin Run " + str(run_number)+ " of "+ str(function.__name__))
+    snake = Snake(START_POS, WHITE, RED)
+    window = pygame.display.set_mode((WIDTH, HEIGHT))
+    game = Game(window, snake)
+    dead = False
+    log = Log(function.__name__, heuristic.__name__)
+    while not dead:
+        # initialize search problem
+        log.start_stopwatch()
+        problem = searchproblem.SimpleSearchProblem(game, game.get_state())
+        moves = function(problem, heuristic)
+        log.stop_stopwatch()
+
+        for i in range(len(moves)):
+            game.snake.discrete_move(moves[i])
+            if game.snake.wall_collide():
+                dead = True
+                log.terminate("Wall Collision")
+                break
+            if game.snake.body_collide():
+                dead = True
+                log.terminate("Body Collision")
+                break
+            if game.food_eaten(snake.head.pos):
+                # increment score
+                game.score += 1
+                log.update(game.score)
+                # add body segment
+                game.snake.add_segment()
+                # generate new food
+                game.random_food()
+    print("Begin Run " + str(run_number) + " of " + str(function.__name__) + " with score " + str(game.score))
+    return log
+
+def gather_empirical_data(number_of_tests):
+    # DFS, BFS, UCS, Astar, Greedy
+
+    #(dfs, util.manhattanDistance, "dfs_log.txt"),
+    algorithms = [(bfs, util.manhattanDistance, "bfs_log.txt"),
+                  (ucs, util.manhattanDistance, "ucs_log.txt"),
+                  (greedy, util.manhattanDistance, "greedy_log.txt"),
+                  (astar, util.foodTrappedHeuristic, "astar_log.txt")]
+    for i in range(len(algorithms)):
+        for j in range(number_of_tests):
+            log = no_display_run(algorithms[i][0], j + 1, algorithms[i][1])
+            log.save(algorithms[i][2])
+
+
+#gather_empirical_data(25)
+
+
+def parse_empirical_data(num_tests):
+    log_files = ["bfs_log.txt", "ucs_log.txt", "greedy_log.txt", "astar_log.txt"]
+    for filename in log_files:
+        log = open(filename, 'r')
+        line_list = log.readlines()
+        log.close()
+        # Accumulating the score and average turn time per game
+        total_score = 0
+        total_avg_time = 0
+
+        for line in line_list:
+            words = line.split(" ")
+            if words[0] == "Score:":
+                total_score += int(words[1])
+            elif words[0] == "Average":
+                total_avg_time += float(words[2])
+
+        print("Algorithm: " + line_list[0])
+        print("Average Turn Time: " + str(total_avg_time / num_tests))
+        print("Average Game Score: " + str(total_score / num_tests))
+        print("---")
+
+parse_empirical_data(25)
