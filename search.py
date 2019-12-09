@@ -91,8 +91,49 @@ def dls(problem, heuristic=None):
 
                     frontier.push((next_state, current_node_path + [action]))
 
+def alt_dfs(problem, heuristic=None):
+    cutoff = ROWS + COLS
+    initial_node = (problem.get_start_state(), [])
+    frontier = util.Stack()
+    frontier.push(initial_node)
+    explored = []
+    while True:
+        # Fail if frontier is empty
+        if frontier.isEmpty():
+            raise Exception("Fail")
+        # Remove the last node from the frontier
+        current_node = frontier.pop()
+        # Add that node to the explored set
+        explored.append(current_node[0])
+        # Check if the goal state has been reached, if so return path
+        if problem.is_goal_state(current_node[0]) is True:
+            # List of the directions chosen is returned
+            return current_node[1]
 
+        if len(current_node[1]) <= cutoff:
 
+            # Otherwise, find all successors and update frontier
+            successors = problem.get_better_successors(current_node[0])
+            for node in successors:
+                if node[0] not in explored:
+                    # Check that the node is not in the frontier using temp stack
+                    bounce = util.Stack()
+                    while not frontier.isEmpty():
+                        move_node = frontier.pop()
+                        if (move_node[0]['snake'].head.pos == current_node[0]['snake'].head.pos) and \
+                                (move_node[0]['snake'].direction == current_node[0]['snake'].direction):
+                            # Discard move_node, it will be replaced later
+                            pass
+                        # Otherwise keep looking
+                        else:
+                            bounce.push(move_node)
+                    # Push all items from temp stack back into frontier
+                    while not bounce.isEmpty():
+                        go_back = bounce.pop()
+                        frontier.push(go_back)
+
+                    # Add (or replace) the node to the frontier
+                    frontier.push((node[0], current_node[1] + [node[1]]))
 
 
 '''

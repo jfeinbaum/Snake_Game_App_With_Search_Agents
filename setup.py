@@ -1,12 +1,12 @@
 # Game Dimensions (rows & cols should evenly divide game board)
 WIDTH = 600
 HEIGHT = 600
-ROWS = 10
-COLS = 10
+ROWS = 4
+COLS = 4
 CELL_SIZE = WIDTH // ROWS
 
 # Starting position
-START_POS = (5, 5)
+START_POS = (2, 2)
 
 # Color tuples
 WHITE = (255, 255, 255)
