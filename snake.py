@@ -241,6 +241,8 @@ def search_driver(function, heuristic=util.manhattanDistance):
         log.start_stopwatch()
         problem = searchproblem.SimpleSearchProblem(game, game.get_state())
         moves = function(problem, heuristic)
+        print(moves)
+
         log.stop_stopwatch()
 
         for i in range(len(moves)):
@@ -279,7 +281,7 @@ def search_driver(function, heuristic=util.manhattanDistance):
     return log
 
 
-log = search_driver(bfs_plus)
+log = search_driver(dls)
 #log.save("log.txt")
 #manual_game()
 
