@@ -279,8 +279,8 @@ def search_driver(function, heuristic=util.manhattanDistance):
     return log
 
 
-# log = search_driver(astar, util.foodTrappedHeuristic)
-# log.save("log.txt")
+log = search_driver(bfs_plus)
+#log.save("log.txt")
 #manual_game()
 
 
@@ -323,10 +323,11 @@ def gather_empirical_data(number_of_tests):
     # DFS, BFS, UCS, Astar, Greedy
 
     #(dfs, util.manhattanDistance, "dfs_log.txt"),
-    algorithms = [(bfs, util.manhattanDistance, "bfs_log.txt"),
-                  (ucs, util.manhattanDistance, "ucs_log.txt"),
-                  (greedy, util.manhattanDistance, "greedy_log.txt"),
-                  (astar, util.foodTrappedHeuristic, "astar_log.txt")]
+    # algorithms = [(bfs, util.manhattanDistance, "bfs_log.txt"),
+    #               (ucs, util.manhattanDistance, "ucs_log.txt"),
+    #               (greedy, util.manhattanDistance, "greedy_log.txt"),
+    #               (astar, util.foodTrappedHeuristic, "astar_log.txt")]
+    algorithms = [(astar, util.manhattanDistance, "astar2_log.txt")]
     for i in range(len(algorithms)):
         for j in range(number_of_tests):
             log = no_display_run(algorithms[i][0], j + 1, algorithms[i][1])
@@ -337,7 +338,8 @@ def gather_empirical_data(number_of_tests):
 
 
 def parse_empirical_data(num_tests):
-    log_files = ["bfs_log.txt", "ucs_log.txt", "greedy_log.txt", "astar_log.txt"]
+    #log_files = ["bfs_log.txt", "ucs_log.txt", "greedy_log.txt", "astar_log.txt", "astar_log2.txt"]
+    log_files = ["astar2_log.txt"]
     for filename in log_files:
         log = open(filename, 'r')
         line_list = log.readlines()
@@ -358,4 +360,4 @@ def parse_empirical_data(num_tests):
         print("Average Game Score: " + str(total_score / num_tests))
         print("---")
 
-parse_empirical_data(25)
+#parse_empirical_data(25)

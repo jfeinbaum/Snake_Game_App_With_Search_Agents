@@ -96,7 +96,51 @@ def bfs(problem, heuristic=None):
                     frontier.push((next_state, current_node_path + [action]))
 
 
+def bfs_plus(problem, heuristic=None):
+    # Initialize problem, pushing first node to frontier
+    initial_node = (problem.get_start_state(), [])
+    frontier = util.Queue()
+    frontier.push(initial_node)
+    explored = []
 
+    while not frontier.isEmpty():
+        current_node = frontier.pop()
+        current_node_state = current_node[0]
+        current_node_path = current_node[1]
+        explored.append(current_node_state)
+
+        if problem.is_goal_state(current_node_state):
+            return current_node_path
+
+        for successor in problem.get_better_successors(current_node_state):
+
+            action = successor[1]
+            next_state = successor[0]
+
+            if next_state not in explored:
+
+                # Check if the frontier contains a node with the next state
+                # If so, set boolean which prevents adding to frontier
+                # Maintain temp queue to hold items popped from frontier
+                # Push items from temp queue back onto frontier
+
+                frontier_contains_next_state = False
+                temp_queue = util.Queue()
+
+                while not frontier.isEmpty():
+                    current = frontier.pop()
+                    if current[0]['snake'].head.pos == next_state['snake'].head.pos:
+                        frontier_contains_next_state = True
+
+                    temp_queue.push(current)
+
+                while not temp_queue.isEmpty():
+                    frontier.push(temp_queue.pop())
+
+                if not frontier_contains_next_state:
+                    frontier.push((next_state, current_node_path + [action]))
+
+    raise Exception("Ran out of states")
 
 
 '''

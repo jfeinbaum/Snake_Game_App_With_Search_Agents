@@ -73,6 +73,24 @@ class SimpleSearchProblem(SearchProblem):
 
         return successors
 
+    def get_better_successors(self, state):
+        successors = []
+        for action in get_moves():
+            successor = self.game.get_new_state(state, action)
+            if successor['snake'].wall_collide() or successor['snake'].body_collide():
+                cost = 999
+            else:
+                cost = 1
+                successors.append((successor, action, cost))
+
+        return successors
+
+        # if len(successors) > 0:
+        #     return successors
+        # else:
+        #     print("HERE")
+        #     return [(self.game.get_new_state(state, Action.UP), Action.UP, 999)]
+
 
 
 
