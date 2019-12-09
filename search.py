@@ -1,5 +1,6 @@
 import util
 from setup import *
+import random
 
 
 '''
@@ -48,61 +49,29 @@ def dfs(problem, heuristic=None):
 
 
 def dls(problem, heuristic=None):
-    # Calculate depth cutoff
-    depth_cutoff = ROWS + COLS
-
-    # Initialize problem, pushing first node to frontier
-    initial_node = (problem.get_start_state(), [])
-    frontier = util.Stack()
-    frontier.push(initial_node)
-    explored = []
-
-    while not frontier.isEmpty():
-        current_node = frontier.pop()
-        current_node_state = current_node[0]
-        current_node_path = current_node[1]
-        explored.append(current_node_state)
-
-        if problem.is_goal_state(current_node_state):
-            return current_node_path
-
-        if len(current_node_path) <= depth_cutoff:
-
-            for successor in problem.get_successors(current_node_state):
-                action = successor[1]
-                next_state = successor[0]
-
-                if next_state not in explored:
-
-                    # Check if the frontier contains a node with the nextState
-                    # If so, remove from the frontier
-                    # Maintain temp stack to hold items popped from frontier
-                    # Push items from temp stack back onto frontier
-
-                    temp_stack = util.Stack()
-                    while not frontier.isEmpty():
-                        current = frontier.pop()
-                        # if current[0] == next_state:
-                        if current[0]['snake'].head.pos == next_state['snake'].head.pos:
-                            break
-                        temp_stack.push(current)
-                    while not temp_stack.isEmpty():
-                        frontier.push(temp_stack.pop())
-
-                    frontier.push((next_state, current_node_path + [action]))
-
-def alt_dfs(problem, heuristic=None):
     cutoff = ROWS + COLS
     initial_node = (problem.get_start_state(), [])
     frontier = util.Stack()
     frontier.push(initial_node)
     explored = []
+    # Memory of the last valid node for the cutoff return
+    most_recent_node = initial_node
     while True:
         # Fail if frontier is empty
         if frontier.isEmpty():
-            raise Exception("Fail")
+            print("DFS cutoff was reached.")
+            try:
+                successor_list = problem.get_better_successors(most_recent_node[0])
+                actions = []
+                for successor in successor_list:
+                    actions.append(successor[1])
+                return [random.choice(actions)]
+            except IndexError:
+                # Arbitrarily return left if get better successors was an empty list
+                return [util.Action.LEFT]
         # Remove the last node from the frontier
         current_node = frontier.pop()
+        most_recent_node = current_node
         # Add that node to the explored set
         explored.append(current_node[0]['snake'].head.pos)
         # Check if the goal state has been reached, if so return path

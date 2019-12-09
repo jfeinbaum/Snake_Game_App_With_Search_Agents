@@ -281,7 +281,7 @@ def search_driver(function, heuristic=util.manhattanDistance):
     return log
 
 
-log = search_driver(alt_dfs)
+log = search_driver(dls)
 #log.save("log.txt")
 #manual_game()
 
