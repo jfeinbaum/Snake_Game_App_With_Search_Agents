@@ -104,7 +104,7 @@ def alt_dfs(problem, heuristic=None):
         # Remove the last node from the frontier
         current_node = frontier.pop()
         # Add that node to the explored set
-        explored.append(current_node[0])
+        explored.append(current_node[0]['snake'].head.pos)
         # Check if the goal state has been reached, if so return path
         if problem.is_goal_state(current_node[0]) is True:
             # List of the directions chosen is returned
@@ -115,13 +115,12 @@ def alt_dfs(problem, heuristic=None):
             # Otherwise, find all successors and update frontier
             successors = problem.get_better_successors(current_node[0])
             for node in successors:
-                if node[0] not in explored:
+                if node[0]['snake'].head.pos not in explored:
                     # Check that the node is not in the frontier using temp stack
                     bounce = util.Stack()
                     while not frontier.isEmpty():
                         move_node = frontier.pop()
-                        if (move_node[0]['snake'].head.pos == current_node[0]['snake'].head.pos) and \
-                                (move_node[0]['snake'].direction == current_node[0]['snake'].direction):
+                        if (move_node[0]['snake'].head.pos == current_node[0]['snake'].head.pos):
                             # Discard move_node, it will be replaced later
                             pass
                         # Otherwise keep looking
