@@ -70,3 +70,129 @@ Average Turn Time: 0.06463345158605943
 Average Game Score: 33.932
 ---
 ----- END OF AUTOMATED TESTING SESSION -----
+----- BEGINNING OF AUTOMATED TESTING SESSION -----
+Rows:    10
+Columns: 10
+Number of Tests: 500
+
+---
+Algorithm: dls
+Heuristic: manhattanDistance
+Average Turn Time:  0.03781475756795229
+Fastest Turn Time:  0.003627500000002707
+Longest Turn Time:  0.07509324482759305
+Average Game Score: 14.554
+High Score:         29
+Low Score:          0
+---
+Algorithm: bfs
+Heuristic: manhattanDistance
+Average Turn Time:  0.167479191902219
+Fastest Turn Time:  0.0015895999998747357
+Longest Turn Time:  1.429093100000017
+Average Game Score: 6.552
+High Score:         24
+Low Score:          1
+---
+Algorithm: bfs_plus
+Heuristic: manhattanDistance
+Average Turn Time:  0.15355844227721369
+Fastest Turn Time:  0.03728968750004924
+Longest Turn Time:  0.28652508648646463
+Average Game Score: 32.544
+High Score:         59
+Low Score:          7
+---
+Algorithm: ucs
+Heuristic: manhattanDistance
+Average Turn Time:  0.1872727489033261
+Fastest Turn Time:  0.046236566666721046
+Longest Turn Time:  0.3677266816326776
+Average Game Score: 32.56
+High Score:         56
+Low Score:          8
+---
+Algorithm: ucs_plus
+Heuristic: manhattanDistance
+Average Turn Time:  0.15945895512299826
+Fastest Turn Time:  0.044809990909429456
+Longest Turn Time:  0.31604389677425887
+Average Game Score: 32.732
+High Score:         61
+Low Score:          10
+---
+Algorithm: astar
+Heuristic: manhattanDistance
+Average Turn Time:  0.04680001642398317
+Fastest Turn Time:  0.006850899999855236
+Longest Turn Time:  0.16272146326531473
+Average Game Score: 33.002
+High Score:         57
+Low Score:          12
+---
+Algorithm: astar
+Heuristic: foodTrappedHeuristic
+Average Turn Time:  0.0639362510576411
+Fastest Turn Time:  0.005947790000209352
+Longest Turn Time:  0.28463588627456893
+Average Game Score: 32.88
+High Score:         58
+Low Score:          9
+---
+Algorithm: astar_plus
+Heuristic: manhattanDistance
+Average Turn Time:  0.040819487018447564
+Fastest Turn Time:  0.0063962181816763905
+Longest Turn Time:  0.15848629423086236
+Average Game Score: 32.862
+High Score:         58
+Low Score:          7
+---
+Algorithm: astar_plus
+Heuristic: foodTrappedHeuristic
+Average Turn Time:  0.045671154332083255
+Fastest Turn Time:  0.010084794118002345
+Longest Turn Time:  0.16528369512214827
+Average Game Score: 32.688
+High Score:         56
+Low Score:          5
+---
+Algorithm: greedy
+Heuristic: manhattanDistance
+Average Turn Time:  0.004038528175021406
+Fastest Turn Time:  0.0004351500010670861
+Longest Turn Time:  0.010214242105384505
+Average Game Score: 6.932
+High Score:         20
+Low Score:          1
+---
+Algorithm: greedy
+Heuristic: foodTrappedHeuristic
+Average Turn Time:  0.005202943728161398
+Fastest Turn Time:  0.0006700500016449951
+Longest Turn Time:  0.012015092857057295
+Average Game Score: 6.262
+High Score:         21
+Low Score:          1
+---
+Algorithm: greedy_plus
+Heuristic: manhattanDistance
+Average Turn Time:  0.04923952882975766
+Fastest Turn Time:  0.0043091500003356485
+Longest Turn Time:  1.1395622636362697
+Average Game Score: 33.148
+High Score:         55
+Low Score:          9
+---
+Algorithm: greedy_plus
+Heuristic: foodTrappedHeuristic
+Average Turn Time:  0.06463345158605943
+Fastest Turn Time:  0.00405685000041558
+Longest Turn Time:  2.96853103333342
+Average Game Score: 33.932
+High Score:         63
+Low Score:          9
+---
+----- END OF AUTOMATED TESTING SESSION -----
+
+

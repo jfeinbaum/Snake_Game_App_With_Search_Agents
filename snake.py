@@ -351,20 +351,37 @@ def parse_empirical_data():
         # Accumulating the score and average turn time per game
         total_score = 0
         total_avg_time = 0
+        # Keep track of the [high/low] x [score/turn time] for each algorithm file
+        high_score = float('-inf')
+        low_score = float('inf')
+        longest_turn = float('-inf')
+        shortest_turn = float('inf')
         for line in line_list:
             words = line.split(" ")
             if words[0] == "Score:":
                 total_score += int(words[1])
+                if int(words[1]) > high_score:
+                    high_score = int(words[1])
+                elif int(words[1]) < low_score:
+                    low_score = int(words[1])
             elif words[0] == "Average":
                 total_avg_time += float(words[2])
+                if float(words[2]) > longest_turn:
+                    longest_turn = float(words[2])
+                elif float(words[2]) < shortest_turn:
+                    shortest_turn = float(words[2])
         # Record the calculations in the results file
         data_file.write(line_list[0])
         data_file.write(line_list[1])
-        data_file.write("Average Turn Time: " + str(total_avg_time / NUM_TESTS) + "\n")
+        data_file.write("Average Turn Time:  " + str(total_avg_time / NUM_TESTS) + "\n")
+        data_file.write("Fastest Turn Time:  " + str(shortest_turn) + "\n")
+        data_file.write("Longest Turn Time:  " + str(longest_turn) + "\n")
         data_file.write("Average Game Score: " + str(total_score / NUM_TESTS) + "\n")
+        data_file.write("High Score:         " + str(high_score) + "\n")
+        data_file.write("Low Score:          " + str(low_score) + "\n")
         data_file.write("---\n")
 
-    data_file.write("----- END OF AUTOMATED TESTING SESSION -----\n")
+    data_file.write("----- END OF AUTOMATED TESTING SESSION -----\n\n\n")
     data_file.close()
 
 
@@ -387,5 +404,5 @@ ALGORITHMS = [(dls, util.manhattanDistance, "data/dls_log.txt"),
 
 NUM_TESTS = 500
 
-gather_empirical_data()
+#gather_empirical_data()
 parse_empirical_data()
