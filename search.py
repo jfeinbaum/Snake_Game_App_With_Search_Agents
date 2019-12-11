@@ -14,9 +14,11 @@ def dfs(problem, heuristic=None):
     frontier = util.Stack()
     frontier.push(initial_node)
     explored = []
+    most_recent_node = initial_node
 
     while not frontier.isEmpty():
         current_node = frontier.pop()
+        most_recent_node = current_node
         current_node_state = current_node[0]
         current_node_path = current_node[1]
         explored.append(current_node_state)
@@ -28,13 +30,17 @@ def dfs(problem, heuristic=None):
             action = successor[1]
             next_state = successor[0]
 
-            if next_state not in explored:
+            # Infinite loop from successor way out of bounds, do not add these to the frontier
+            # head_x = successor[0]['snake'].head.pos[0]
+            # head_y = successor[0]['snake'].head.pos[1]
+            # if not (head_x < 0 or head_x > ROWS - 1 or head_y < 0 or head_y > COLS - 1):
 
+            if next_state not in explored:
                 # Check if the frontier contains a node with the nextState
                 # If so, remove from the frontier
                 # Maintain temp stack to hold items popped from frontier
                 # Push items from temp stack back onto frontier
-                
+
                 temp_stack = util.Stack()
                 while not frontier.isEmpty():
                     current = frontier.pop()
@@ -44,12 +50,22 @@ def dfs(problem, heuristic=None):
                     temp_stack.push(current)
                 while not temp_stack.isEmpty():
                     frontier.push(temp_stack.pop())
-
+                print("Appending to frontier: " + "(" + str(next_state['snake'].head.pos[0]) + "," + str(next_state['snake'].head.pos[1]) + ")")
                 frontier.push((next_state, current_node_path + [action]))
+    try:
+        print("failsafe")
+        successor_list = problem.get_better_successors(most_recent_node[0])
+        actions = []
+        for successor in successor_list:
+            actions.append(successor[1])
+        return [random.choice(actions)]
+    except IndexError:
+        # Arbitrarily return left if get better successors was an empty list
+        return [util.Action.LEFT]
 
 
 def dls(problem, heuristic=None):
-    cutoff = ROWS + COLS
+    cutoff = (ROWS + COLS) * 2
     initial_node = (problem.get_start_state(), [])
     frontier = util.Stack()
     frontier.push(initial_node)
@@ -160,9 +176,11 @@ def bfs_plus(problem, heuristic=None):
     frontier = util.Queue()
     frontier.push(initial_node)
     explored = []
+    most_recent_node = initial_node
 
     while not frontier.isEmpty():
         current_node = frontier.pop()
+        most_recent_node = current_node
         current_node_state = current_node[0]
         current_node_path = current_node[1]
         explored.append(current_node_state)
@@ -197,8 +215,16 @@ def bfs_plus(problem, heuristic=None):
 
                 if not frontier_contains_next_state:
                     frontier.push((next_state, current_node_path + [action]))
-
-    raise Exception("Ran out of states")
+    try:
+        print("failsafe")
+        successor_list = problem.get_better_successors(most_recent_node[0])
+        actions = []
+        for successor in successor_list:
+            actions.append(successor[1])
+        return [random.choice(actions)]
+    except IndexError:
+        # Arbitrarily return left if get better successors was an empty list
+        return [util.Action.LEFT]
 
 
 '''
@@ -268,10 +294,12 @@ def ucs_plus(problem, heuristic=None):
     frontier = util.PriorityQueue()
     frontier.push(initial_node, 0)
     explored = []
+    most_recent_node = initial_node
 
     while not frontier.isEmpty():
 
         current_node = frontier.pop()
+        most_recent_node = current_node
         current_node_state = current_node[0]
         current_node_path = current_node[1]
         current_node_cost = current_node[2]
@@ -317,6 +345,16 @@ def ucs_plus(problem, heuristic=None):
 
                 if not frontier_contains_next_state:
                     frontier.push(next_node, next_cost)
+    try:
+        print("failsafe")
+        successor_list = problem.get_better_successors(most_recent_node[0])
+        actions = []
+        for successor in successor_list:
+            actions.append(successor[1])
+        return [random.choice(actions)]
+    except IndexError:
+        # Arbitrarily return left if get better successors was an empty list
+        return [util.Action.LEFT]
 
 
 
@@ -331,15 +369,10 @@ def astar(problem, heuristic):
     # Initialize problem, pushing first node to frontier
     initial_node = (problem.get_start_state(), [], 0)
     frontier = util.PriorityQueue()
-
-
-
     frontier.push(initial_node, heuristic( problem.get_start_state()) )
     explored = []
 
-
     while not frontier.isEmpty():
-
         current_node = frontier.pop()
         current_node_state = current_node[0]
         current_node_path = current_node[1]
@@ -397,20 +430,16 @@ def astar(problem, heuristic):
 
 
 def astar_plus(problem, heuristic):
-
     # Initialize problem, pushing first node to frontier
     initial_node = (problem.get_start_state(), [], 0)
     frontier = util.PriorityQueue()
-
-
-
     frontier.push(initial_node, heuristic( problem.get_start_state()) )
     explored = []
-
+    most_recent_node = initial_node
 
     while not frontier.isEmpty():
-
         current_node = frontier.pop()
+        most_recent_node = current_node
         current_node_state = current_node[0]
         current_node_path = current_node[1]
         current_node_cost = current_node[2]
@@ -429,8 +458,6 @@ def astar_plus(problem, heuristic):
             next_priority = next_cost + heuristic(next_state)
 
             if next_state not in explored:
-
-
                 # Check if the frontier contains node with next state
                 # If so, replace node in frontier with the next priority if lower
                 # Maintain temporary priority queue and push back on to frontier
@@ -463,6 +490,16 @@ def astar_plus(problem, heuristic):
 
                 if not frontier_contains_next_state:
                     frontier.push(next_node, next_priority)
+    try:
+        print("failsafe")
+        successor_list = problem.get_better_successors(most_recent_node[0])
+        actions = []
+        for successor in successor_list:
+            actions.append(successor[1])
+        return [random.choice(actions)]
+    except IndexError:
+        # Arbitrarily return left if get better successors was an empty list
+        return [util.Action.LEFT]
 
 
 
@@ -533,6 +570,7 @@ def greedy(problem, heuristic):
 
                 if not frontier_contains_next_state:
                     frontier.push(next_node, next_priority)
+
 
 def greedy_plus(problem, heuristic):
     # Initialize problem, pushing first node to frontier

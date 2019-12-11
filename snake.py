@@ -281,7 +281,8 @@ def search_driver(function, heuristic=util.manhattanDistance):
     return log
 
 
-log = search_driver(greedy_plus)
+
+#log = search_driver(dls)
 #log.save("log.txt")
 #manual_game()
 
@@ -318,30 +319,31 @@ def no_display_run(function, run_number, heuristic=util.manhattanDistance):
                 game.snake.add_segment()
                 # generate new food
                 game.random_food()
-    print("Begin Run " + str(run_number) + " of " + str(function.__name__) + " with score " + str(game.score))
+    print("End Run " + str(run_number) + " of " + str(function.__name__) + " with score " + str(game.score))
     return log
 
-def gather_empirical_data(number_of_tests):
-    # DFS, BFS, UCS, Astar, Greedy
 
-    #(dfs, util.manhattanDistance, "dfs_log.txt"),
-    # algorithms = [(bfs, util.manhattanDistance, "bfs_log.txt"),
-    #               (ucs, util.manhattanDistance, "ucs_log.txt"),
-    #               (greedy, util.manhattanDistance, "greedy_log.txt"),
-    #               (astar, util.foodTrappedHeuristic, "astar_log.txt")]
-    algorithms = [(astar, util.manhattanDistance, "astar2_log.txt")]
-    for i in range(len(algorithms)):
-        for j in range(number_of_tests):
-            log = no_display_run(algorithms[i][0], j + 1, algorithms[i][1])
-            log.save(algorithms[i][2])
+def gather_empirical_data():
+    # Run the given number of tests on each algorithm, saving the results under the given filename
+    for i in range(len(ALGORITHMS)):
+        for j in range(NUM_TESTS):
+            log = no_display_run(ALGORITHMS[i][0], j + 1, ALGORITHMS[i][1])
+            log.save(ALGORITHMS[i][2])
 
 
-#gather_empirical_data(25)
-
-
-def parse_empirical_data(num_tests):
-    #log_files = ["bfs_log.txt", "ucs_log.txt", "greedy_log.txt", "astar_log.txt", "astar_log2.txt"]
-    log_files = ["astar2_log.txt"]
+def parse_empirical_data():
+    # Header with information about the current automated test run
+    data_file = open("data/results.txt", 'a')
+    data_file.write("----- BEGINNING OF AUTOMATED TESTING SESSION -----\n")
+    data_file.write("Rows:    " + str(ROWS) + "\n")
+    data_file.write("Columns: " + str(COLS) + "\n")
+    data_file.write("Number of Tests: " + str(NUM_TESTS) + "\n")
+    data_file.write("\n---\n")
+    # Extracting the names of the files to parse
+    log_files = []
+    for entry in ALGORITHMS:
+        log_files.append(entry[2])
+    # Analyze information for each file
     for filename in log_files:
         log = open(filename, 'r')
         line_list = log.readlines()
@@ -349,17 +351,41 @@ def parse_empirical_data(num_tests):
         # Accumulating the score and average turn time per game
         total_score = 0
         total_avg_time = 0
-
         for line in line_list:
             words = line.split(" ")
             if words[0] == "Score:":
                 total_score += int(words[1])
             elif words[0] == "Average":
                 total_avg_time += float(words[2])
+        # Record the calculations in the results file
+        data_file.write(line_list[0])
+        data_file.write(line_list[1])
+        data_file.write("Average Turn Time: " + str(total_avg_time / NUM_TESTS) + "\n")
+        data_file.write("Average Game Score: " + str(total_score / NUM_TESTS) + "\n")
+        data_file.write("---\n")
 
-        print("Algorithm: " + line_list[0])
-        print("Average Turn Time: " + str(total_avg_time / num_tests))
-        print("Average Game Score: " + str(total_score / num_tests))
-        print("---")
+    data_file.write("----- END OF AUTOMATED TESTING SESSION -----\n")
+    data_file.close()
 
-#parse_empirical_data(25)
+
+# Used to run automated testing
+# DFS, DLS, BFS, BFS+, UCS, UCS+, [A-star, A-star+, Greedy, Greedy+] x [Manhattan Distance, Food Trapped]
+# Still some issue with DFS? (dfs, util.manhattanDistance, "data/dfs_log.txt"),
+ALGORITHMS = [(dls, util.manhattanDistance, "data/dls_log.txt"),
+              (bfs, util.manhattanDistance, "data/bfs_log.txt"),
+              (bfs_plus, util.manhattanDistance, "data/bfs_plus_log.txt"),
+              (ucs, util.manhattanDistance, "data/ucs_log.txt"),
+              (ucs_plus, util.manhattanDistance, "data/ucs_plus_log.txt"),
+              (astar, util.manhattanDistance, "data/astar_manhattan_log.txt"),
+              (astar, util.foodTrappedHeuristic, "data/astar_food_trapped_log.txt"),
+              (astar_plus, util.manhattanDistance, "data/astar_plus_manhattan_log.txt"),
+              (astar_plus, util.foodTrappedHeuristic, "data/astar_plus_food_trapped_log.txt"),
+              (greedy, util.manhattanDistance, "data/greedy_manhattan_log.txt"),
+              (greedy, util.foodTrappedHeuristic, "data/greedy_food_trapped_log.txt"),
+              (greedy_plus, util.manhattanDistance, "data/greedy_plus_manhattan_log.txt"),
+              (greedy_plus, util.foodTrappedHeuristic, "data/greedy_plus_food_trapped_log.txt")]
+
+NUM_TESTS = 500
+
+gather_empirical_data()
+parse_empirical_data()

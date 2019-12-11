@@ -1,0 +1,72 @@
+----- BEGINNING OF AUTOMATED TESTING SESSION -----
+Rows:    10
+Columns: 10
+Number of Tests: 500
+
+---
+Algorithm: dls
+Heuristic: manhattanDistance
+Average Turn Time: 0.03781475756795229
+Average Game Score: 14.554
+---
+Algorithm: bfs
+Heuristic: manhattanDistance
+Average Turn Time: 0.167479191902219
+Average Game Score: 6.552
+---
+Algorithm: bfs_plus
+Heuristic: manhattanDistance
+Average Turn Time: 0.15355844227721369
+Average Game Score: 32.544
+---
+Algorithm: ucs
+Heuristic: manhattanDistance
+Average Turn Time: 0.1872727489033261
+Average Game Score: 32.56
+---
+Algorithm: ucs_plus
+Heuristic: manhattanDistance
+Average Turn Time: 0.15945895512299826
+Average Game Score: 32.732
+---
+Algorithm: astar
+Heuristic: manhattanDistance
+Average Turn Time: 0.04680001642398317
+Average Game Score: 33.002
+---
+Algorithm: astar
+Heuristic: foodTrappedHeuristic
+Average Turn Time: 0.0639362510576411
+Average Game Score: 32.88
+---
+Algorithm: astar_plus
+Heuristic: manhattanDistance
+Average Turn Time: 0.040819487018447564
+Average Game Score: 32.862
+---
+Algorithm: astar_plus
+Heuristic: foodTrappedHeuristic
+Average Turn Time: 0.045671154332083255
+Average Game Score: 32.688
+---
+Algorithm: greedy
+Heuristic: manhattanDistance
+Average Turn Time: 0.004038528175021406
+Average Game Score: 6.932
+---
+Algorithm: greedy
+Heuristic: foodTrappedHeuristic
+Average Turn Time: 0.005202943728161398
+Average Game Score: 6.262
+---
+Algorithm: greedy_plus
+Heuristic: manhattanDistance
+Average Turn Time: 0.04923952882975766
+Average Game Score: 33.148
+---
+Algorithm: greedy_plus
+Heuristic: foodTrappedHeuristic
+Average Turn Time: 0.06463345158605943
+Average Game Score: 33.932
+---
+----- END OF AUTOMATED TESTING SESSION -----
